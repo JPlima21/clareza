@@ -1,0 +1,72 @@
+{% extends 'base.html' %}{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'document-preview.css' %}?v=3">
+<a class="muted" href="/">← Voltar para visão geral</a>
+<header>
+  <div>
+    <p class="eyebrow">TUDO EM SEU LUGAR</p>
+    <h1>{% if object %}Editar despesa{% else %}Registrar despesa{% endif %}</h1>
+    <p>Adicione os dados de um pagamento já realizado.</p>
+  </div>
+</header>
+<div class="expense-editor">
+<section class="panel form-panel">
+  <form id="expense-form" method="post" enctype="multipart/form-data"{% if not object %} data-extraction-url="{% url 'extract_document' %}"{% endif %}>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      {% if field.is_hidden %}
+        {{ field }}
+        {{ field.errors }}
+      {% else %}
+        <label data-field="{{ field.name }}">
+          {{ field.label }}{% if field.field.required %} *{% endif %}
+          {% if field.name == 'document' and object.document %}
+            <span class="saved-attachment" role="status">✓ Anexo salvo. Ele será mantido ao salvar a despesa.</span>
+            <span class="replace-attachment">
+              {{ field }}
+              <span class="outline">Substituir arquivo</span>
+            </span>
+            <small id="replacement-name" role="status"></small>
+          {% else %}
+            {{ field }}
+          {% endif %}
+          {{ field.errors }}
+          {% if field.name == 'document' %}
+            <small>PDF, JPG ou PNG • Até 10 MB. Para extração: até 5 páginas e 20 megapixels.</small>
+            {% if not object %}
+              <span class="extraction-actions">
+                <button id="extract-button" class="outline" type="button" disabled>✦ Extrair informações</button>
+                <span id="staged-file" class="staged-file" hidden>✓ Arquivo mantido para salvar com a despesa</span>
+              </span>
+              <span id="extraction-status" class="extraction-status" role="status" aria-live="polite"></span>
+              <ul id="extraction-warnings" class="extraction-warnings" hidden></ul>
+            {% endif %}
+            {% if object.document %}<a href="{% url 'attachment' object.pk %}">↓ Baixar anexo atual</a>{% endif %}
+          {% endif %}
+        </label>
+      {% endif %}
+    {% endfor %}
+    <div class="actions">
+      <button type="submit">✓ Salvar despesa</button>
+      <a class="outline" href="/">Cancelar</a>
+      {% if object %}<a class="danger" href="{% url 'delete' object.pk %}">Excluir despesa</a>{% endif %}
+    </div>
+  </form>
+</section>
+<section class="panel document-preview" aria-labelledby="preview-title"{% if object.document %} data-saved-url="{% url 'attachment' object.pk %}?preview=1" data-saved-name="{{ object.document.name }}"{% endif %}>
+  <div class="section-title">
+    <div>
+      <h3 id="preview-title">Prévia do documento</h3>
+      <p id="preview-name">Confira o documento enquanto preenche a despesa.</p>
+    </div>
+  </div>
+  <p id="preview-placeholder" class="empty" role="status">Selecione um PDF, JPG ou PNG para visualizar aqui.</p>
+  <img id="preview-image" alt="Prévia do documento selecionado" hidden>
+  <iframe id="preview-pdf" title="Prévia do PDF selecionado" hidden></iframe>
+  <a id="preview-open" class="outline" target="_blank" rel="noopener noreferrer" hidden>Abrir documento em outra aba ↗</a>
+</section>
+</div>
+<script src="{% static 'document-preview.js' %}?v=4" defer></script>
+{% if not object %}<script src="{% static 'extraction.js' %}" defer></script>{% endif %}
+{% endblock %}
