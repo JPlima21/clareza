@@ -1,3 +1,4 @@
+# Inicia Django e MySQL juntos; configura rede, variáveis, volumes persistentes e espera pelo banco.
 services:
   db:
     image: mysql:8.4
@@ -23,9 +24,31 @@ services:
       MYSQL_USER: financeiro
     volumes:
       - receipts:/app/media
+      - private_uploads:/app/private_uploads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/login/', timeout=5)"]
+      interval: 5s
+      timeout: 6s
+      retries: 30
     depends_on:
       db:
+        condition: service_healthy
+  telegram:
+    build: .
+    profiles: ["telegram"]
+    command: ["python", "manage.py", "run_telegram_bot"]
+    env_file: .env
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: financeiro
+      MYSQL_USER: financeiro
+    volumes:
+      - receipts:/app/media
+      - private_uploads:/app/private_uploads
+    depends_on:
+      web:
         condition: service_healthy
 volumes:
   mysql_data:
   receipts:
+  private_uploads:

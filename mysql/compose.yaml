@@ -1,3 +1,4 @@
+# Sobe apenas um MySQL local na porta 3306. É uma alternativa separada do Compose da aplicação.
 services:
   db:
     image: mysql:8.4

@@ -1,3 +1,4 @@
+# Monta a imagem da aplicação com Python, bibliotecas MySQL, Poppler e Tesseract para leitura de documentos.
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1

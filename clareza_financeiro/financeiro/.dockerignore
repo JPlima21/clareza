@@ -1,3 +1,4 @@
+# Exclui senhas, bancos locais e uploads da cópia enviada ao construir a imagem Docker.
 .env
 *.sqlite3
 media

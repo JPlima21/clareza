@@ -1,3 +1,4 @@
+# Acrescenta beneficiário e identificação da transação e atualiza o rótulo do valor, preservando os registros existentes.
 from decimal import Decimal
 
 import django.core.validators

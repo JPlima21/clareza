@@ -1,1 +1,79 @@
-{% extends 'base.html' %}{% block content %}<header><div><p class="eyebrow">CADA GASTO CONTA UMA HISTÓRIA</p><h1>Suas finanças, com clareza.</h1><p>Acompanhe seus pagamentos e entenda para onde vai seu dinheiro.</p></div><a class="button" href="{% url 'create' %}">＋ Nova despesa</a></header><form class="filters" method="get">{{ filters.non_field_errors }}{% for field in filters %}<label>{{ field.label }}{{ field }}{{ field.errors }}</label>{% endfor %}<button>Filtrar</button><a class="muted" href="/">Limpar</a></form><section class="stats"><article class="stat primary"><span>Total gasto no período ↗</span><h2>R$ {{ total|floatformat:2 }}</h2><small>Pagamentos registrados</small></article><article class="stat"><span>Despesas pagas</span><h2>{{ count|stringformat:'02d' }}</h2><small>No período selecionado</small></article><article class="stat"><span>Valor médio</span><h2>R$ {{ average|floatformat:2 }}</h2><small>Por pagamento</small></article><article class="stat"><span>Comprovantes anexados</span><h2>{{ documents|stringformat:'02d' }}</h2><small>Organizados em um só lugar</small></article></section><div class="content-grid"><section class="panel" id="historico"><div class="section-title"><div><h3>Histórico de pagamentos</h3><p>Os detalhes de cada saída.</p></div><a class="outline" href="?{{ query }}&export=csv">↓ Exportar CSV</a></div><div class="table-scroll"><table><thead><tr><th>DESPESA</th><th>PAGAMENTO</th><th>VALOR</th><th></th></tr></thead><tbody>{% for e in object_list %}<tr><td><a class="expense" href="{% url 'edit' e.pk %}">{{ e.description }}</a><small>{{ e.category }}</small></td><td>{{ e.paid_at|date:'d/m/Y' }}<small class="paid">✓ Pago</small></td><td class="amount">R$ {{ e.amount|floatformat:2 }}</td><td>{% if e.document %}<a class="file" title="Baixar comprovante" href="{% url 'attachment' e.pk %}">↓ Anexo</a>{% else %}<span class="muted">Sem anexo</span>{% endif %}</td></tr>{% empty %}<tr><td colspan="4"><div class="empty"><span>▤</span><h3>Seu próximo passo é simples.</h3><p>Registre uma despesa paga e anexe o comprovante para começar.</p><a class="button" href="{% url 'create' %}">＋ Registrar primeira despesa</a></div></td></tr>{% endfor %}</tbody></table></div>{% if is_paginated %}<div class="pagination">{% if page_obj.has_previous %}<a href="?{{ query }}&page={{ page_obj.previous_page_number }}">← Anterior</a>{% endif %} Página {{ page_obj.number }} de {{ paginator.num_pages }} {% if page_obj.has_next %}<a href="?{{ query }}&page={{ page_obj.next_page_number }}">Próxima →</a>{% endif %}</div>{% endif %}</section><section class="panel categories" id="categorias"><div class="section-title"><div><h3>Para onde foi?</h3><p>Seus gastos por categoria.</p></div><span>◷</span></div>{% for c in categories %}<div class="category"><div><strong>{{ c.category }}</strong><span>{{ c.percent }}%</span></div><progress value="{{ c.percent }}" max="100"></progress><small>R$ {{ c.total|floatformat:2 }}</small></div>{% empty %}<div class="empty"><p>As categorias aparecerão aqui assim que você registrar seus gastos.</p></div>{% endfor %}<div class="note">✧ <strong>Pequenos registros, grandes descobertas.</strong><p>Manter seus comprovantes juntos ajuda a entender seus hábitos.</p></div></section></div>{% endblock %}
+{# Página inicial com filtros, totais, histórico paginado, exportação CSV e gastos agrupados por categoria. #}
+{% extends 'base.html' %}{% block content %}<header>
+    <div>
+        <p class="eyebrow">CADA GASTO CONTA UMA HISTÓRIA</p>
+        <h1>Suas finanças, com clareza.</h1>
+        <p>Acompanhe seus pagamentos e entenda para onde vai seu dinheiro.</p>
+    </div><a class="button" href="{% url 'create' %}">＋ Nova despesa</a>
+</header>
+<form class="filters" method="get">{{ filters.non_field_errors }}{% for field in filters %}<label>{{ field.label }}{{ field }}{{ field.errors }}</label>{% endfor %}<button>Filtrar</button><a class="muted" href="/">Limpar</a>
+</form>
+<section class="stats">
+    <article class="stat primary"><span>Total gasto no período ↗</span>
+        <h2>R$ {{ total|floatformat:2 }}</h2><small>Pagamentos registrados</small>
+    </article>
+    <article class="stat"><span>Despesas pagas</span>
+        <h2>{{ count|stringformat:'02d' }}</h2><small>No período selecionado</small>
+    </article>
+    <article class="stat"><span>Valor médio</span>
+        <h2>R$ {{ average|floatformat:2 }}</h2><small>Por pagamento</small>
+    </article>
+    <article class="stat"><span>Comprovantes anexados</span>
+        <h2>{{ documents|stringformat:'02d' }}</h2><small>Organizados em um só lugar</small>
+    </article>
+</section>
+<div class="content-grid">
+    <section class="panel" id="historico">
+        <div class="section-title">
+            <div>
+                <h3>Histórico de pagamentos</h3>
+                <p>Os detalhes de cada saída.</p>
+            </div><a class="outline" href="?{{ query }}&export=csv">↓ Exportar CSV</a>
+        </div>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DESPESA</th>
+                        <th>PAGAMENTO</th>
+                        <th>VALOR</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>{% for e in object_list %}<tr>
+                        <td><a class="expense" href="{% url 'edit' e.pk %}">{{ e.description }}</a><small>{{ e.category }}</small></td>
+                        <td>{{ e.paid_at|date:'d/m/Y' }}<small class="paid">✓ Pago</small></td>
+                        <td class="amount">R$ {{ e.amount|floatformat:2 }}</td>
+                        <td>{% if e.document %}<a class="file" title="Baixar comprovante"
+                                href="{% url 'attachment' e.pk %}">↓ Anexo</a>{% else %}<span class="muted">Sem
+                                anexo</span>{% endif %}</td>
+                    </tr>{% empty %}<tr>
+                        <td colspan="4">
+                            <div class="empty"><span>▤</span>
+                                <h3>Seu próximo passo é simples.</h3>
+                                <p>Registre uma despesa paga e anexe o comprovante para começar.</p><a class="button"
+                                    href="{% url 'create' %}">＋ Registrar primeira despesa</a>
+                            </div>
+                        </td>
+                    </tr>{% endfor %}</tbody>
+            </table>
+        </div>{% if is_paginated %}<div class="pagination">{% if page_obj.has_previous %}<a
+                href="?{{ query }}&page={{ page_obj.previous_page_number }}">← Anterior</a>{% endif %} Página {{ page_obj.number }} de {{ paginator.num_pages }} {% if page_obj.has_next %}<a
+                href="?{{ query }}&page={{ page_obj.next_page_number }}">Próxima →</a>{% endif %}</div>{% endif %}
+    </section>
+    <section class="panel categories" id="categorias">
+        <div class="section-title">
+            <div>
+                <h3>Para onde foi?</h3>
+                <p>Seus gastos por categoria.</p>
+            </div><span>◷</span>
+        </div>{% for c in categories %}<div class="category">
+            <div><strong>{{ c.category }}</strong><span>{{ c.percent }}%</span></div><progress value="{{ c.percent }}"
+                max="100"></progress><small>R$ {{ c.total|floatformat:2 }}</small>
+        </div>{% empty %}<div class="empty">
+            <p>As categorias aparecerão aqui assim que você registrar seus gastos.</p>
+        </div>{% endfor %}<div class="note">✧ <strong>Pequenos registros, grandes descobertas.</strong>
+            <p>Manter seus comprovantes juntos ajuda a entender seus hábitos.</p>
+        </div>
+    </section>
+</div>{% endblock %}

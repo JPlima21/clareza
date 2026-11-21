@@ -1,1 +1,8 @@
-{% extends 'base.html' %}{% block content %}<section class="panel form-panel"><h1>Excluir despesa?</h1><p>O registro “{{ object.description }}” de R$ {{ object.amount }} será excluído da apuração.</p><form method="post">{% csrf_token %}<div class="actions"><button>Confirmar exclusão</button><a class="outline" href="{% url 'edit' object.pk %}">Cancelar</a></div></form></section>{% endblock %}
+{# Tela de confirmação antes de excluir uma despesa; envia a confirmação por POST com proteção CSRF. #}
+{% extends 'base.html' %}{% block content %}<section class="panel form-panel">
+    <h1>Excluir despesa?</h1>
+    <p>O registro “{{ object.description }}” de R$ {{ object.amount }} será excluído da apuração.</p>
+    <form method="post">{% csrf_token %}<div class="actions"><button>Confirmar exclusão</button><a class="outline"
+                href="{% url 'edit' object.pk %}">Cancelar</a></div>
+    </form>
+</section>{% endblock %}

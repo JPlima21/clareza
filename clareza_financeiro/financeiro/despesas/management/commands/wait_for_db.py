@@ -1,3 +1,4 @@
+# Implementa python manage.py wait_for_db: tenta consultar o banco antes de continuar a inicialização.
 import time
 
 from django.core.management.base import BaseCommand,CommandError

@@ -1,3 +1,4 @@
+# Define os campos e validações do cadastro e dos filtros; confere anexos e tokens de arquivos já extraídos.
 from django import forms
 
 from .document_extraction import DocumentError, TemporaryUploadStore, validate_upload

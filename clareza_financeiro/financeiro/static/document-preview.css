@@ -1,3 +1,4 @@
+/* Organiza o formulário ao lado da prévia do documento e adapta esse layout para telas menores. */
 .expense-editor{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
 .expense-editor .form-panel{max-width:none;min-width:0}
 .expense-editor .actions{flex-wrap:wrap}

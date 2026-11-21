@@ -1,3 +1,5 @@
+# Valida PDFs e imagens, guarda uploads temporários por usuário e extrai sugestáes de pagamento por texto ou OCR. 
+# Não cadastra a despesa: os dados precisam ser revisados e salvos pelo usuário.
 from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
@@ -19,12 +21,12 @@ from pypdf import PdfReader
 from pypdf.errors import PdfReadError
 
 
-MAX_FILE_SIZE=10*1024*1024
-MAX_PDF_PAGES=5
-MAX_IMAGE_PIXELS=20_000_000
-MAX_IMAGE_SIDE=6000
-PROCESSING_TIMEOUT=30
-TEMP_UPLOAD_MAX_AGE=60*60
+MAX_FILE_SIZE=10*1024*1024 # 10 MB
+MAX_PDF_PAGES=5 # 5 pages
+MAX_IMAGE_PIXELS=20_000_000 # 20 megapixels
+MAX_IMAGE_SIDE=6000 # 6000 pixels
+PROCESSING_TIMEOUT=30 # 30 seconds
+TEMP_UPLOAD_MAX_AGE=60*60 # 1 hour
 ALLOWED_SUFFIXES={'.pdf','.png','.jpg','.jpeg'}
 
 

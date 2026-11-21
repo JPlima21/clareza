@@ -1,3 +1,4 @@
+# Reúne testes automatizados do cadastro, validações, extração e isolamento entre usuários, usando documentos sintéticos.
 from decimal import Decimal
 from io import BytesIO
 from pathlib import Path

@@ -1,1 +1,30 @@
-{% load static %}<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clareza • Finanças pessoais</title><link rel="stylesheet" href="{% static 'style.css' %}"></head><body><aside><a class="brand" href="/">◈ <span>clareza<span class="tiny">FINANÇAS PESSOAIS</span></span></a><p class="navlabel">SEU ESPAÇO</p><nav><a class="active" href="/">▦ <span>Visão geral</span></a><a href="{% url 'create' %}">＋ <span>Registrar despesa</span></a><a href="/#historico">≡ <span>Meus pagamentos</span></a><a href="/#categorias">◷ <span>Apuração por categoria</span></a></nav><div class="aside-bottom"><div class="tip">Um registro de cada vez.<br><strong>Mais clareza para sua vida.</strong></div>{% if user.is_authenticated %}<p>{{ user.username }}</p><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">Sair da conta ↗</button></form>{% endif %}</div></aside><main>{% block content %}{% endblock %}<footer>Clareza • Seu dinheiro, com mais sentido.</footer></main></body></html>
+{# Layout compartilhado das páginas: carrega o estilo, mostra o menu e o usuário e reserva o bloco content para cada tela. #}
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Clareza • Finanças pessoais</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <aside><a class="brand" href="/">◈ <span>clareza<span class="tiny">FINANÇAS PESSOAIS</span></span></a>
+        <p class="navlabel">SEU ESPAÇO</p>
+        <nav><a class="active" href="/">▦ <span>Visão geral</span></a><a href="{% url 'create' %}">＋ <span>Registrar
+                    despesa</span></a><a href="/#historico">≡ <span>Meus pagamentos</span></a><a href="/#categorias">◷
+                <span>Apuração por categoria</span></a><a href="{% url 'telegram_settings' %}"><span>Telegram</span></a>
+        </nav>
+        <div class="aside-bottom">
+            <div class="tip">Um registro de cada vez.<br><strong>Mais clareza para sua vida.</strong></div>{% if user.is_authenticated %}<p>{{ user.username }}</p>
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">Sair da conta
+                    ↗</button></form>{% endif %}
+        </div>
+    </aside>
+    <main>{% block content %}{% endblock %}<footer>Clareza • Seu dinheiro, com mais sentido.</footer>
+    </main>
+</body>
+
+</html>

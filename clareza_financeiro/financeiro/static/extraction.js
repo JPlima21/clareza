@@ -1,3 +1,4 @@
+/* Envia o documento para extração, mostra avisos e preenche somente campos vazios; guarda o token para anexar o arquivo ao salvar a despesa. */
 document.addEventListener('DOMContentLoaded',()=>{
   const form=document.querySelector('#expense-form[data-extraction-url]');
   if(!form)return;

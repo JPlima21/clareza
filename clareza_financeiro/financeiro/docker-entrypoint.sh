@@ -1,4 +1,5 @@
 #!/bin/sh
+# Inicia o contêiner: aguarda o banco, aplica migrações, limpa uploads expirados e inicia o servidor Django. Repete a limpeza a cada hora.
 set -e
 
 python manage.py wait_for_db

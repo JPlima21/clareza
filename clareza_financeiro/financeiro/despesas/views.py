@@ -1,3 +1,4 @@
+# Atende às requisições do site: filtra e resume gastos, exporta CSV, cadastra/edita/exclui despesas e entrega extração e anexos com acesso por usuário.
 from decimal import Decimal
 from datetime import date
 import csv

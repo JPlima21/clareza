@@ -1,3 +1,4 @@
+# Entrada dos comandos Django. Use python manage.py seguido de runserver, migrate, test ou createsuperuser, por exemplo.
 import os, sys
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings')
 from django.core.management import execute_from_command_line

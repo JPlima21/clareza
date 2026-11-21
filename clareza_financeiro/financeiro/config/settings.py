@@ -1,3 +1,4 @@
+# Centraliza a configuração do Django: banco, autenticação, idioma, templates, arquivos e limites de upload.
 import os
 from pathlib import Path
 BASE_DIR=Path(__file__).resolve().parent.parent
@@ -24,3 +25,6 @@ LOGOUT_REDIRECT_URL='/login/'
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 DATA_UPLOAD_MAX_MEMORY_SIZE=12*1024*1024
 FILE_UPLOAD_MAX_MEMORY_SIZE=10*1024*1024
+
+TELEGRAM_BOT_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN','')
+TELEGRAM_BOT_USERNAME=os.getenv('TELEGRAM_BOT_USERNAME','').lstrip('@')

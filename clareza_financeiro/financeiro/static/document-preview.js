@@ -1,3 +1,4 @@
+/* Mostra a prévia de PDF ou imagem selecionada, ou do anexo salvo; atualiza a indicação de substituição e libera URLs temporárias. */
 document.addEventListener('DOMContentLoaded',()=>{
   const file=document.querySelector('#expense-form #id_document');
   if(!file)return;

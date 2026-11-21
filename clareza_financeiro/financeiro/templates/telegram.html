@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{# Página de vinculação: mostra o estado da configuração, gera o código e o link para abrir o bot e permite desvincular a conta. Os formulários usam CSRF e são atendidos por telegram_link.py. #}
+{% block content %}
+<h1>Telegram</h1>
+<p>Receba e revise comprovantes, consulte suas despesas e solicite seus anexos em uma conversa privada com o bot.</p>
+<p>Os arquivos e as respostas enviados na conversa passam pelos servidores do Telegram. O OCR continua sendo executado
+    no Clareza.</p>
+{% if not configured %}
+<p>A integração ainda não foi configurada. Defina TELEGRAM_BOT_TOKEN e TELEGRAM_BOT_USERNAME no ambiente e inicie o
+    serviço do bot.</p>
+{% endif %}
+{% if account.telegram_id %}
+<p>Conta vinculada ao identificador {{ account.telegram_id }}.</p>
+<form method="post">{% csrf_token %}<button name="action" value="unlink">Desvincular Telegram</button></form>
+{% elif configured %}
+<form method="post">{% csrf_token %}<button name="action" value="generate">Gerar código de vinculação</button></form>
+{% if code %}
+<p>Válido por 10 minutos, para um único uso. Não compartilhe este código.</p>
+<p><a href="https://t.me/{{ bot_username }}?start={{ code }}" rel="noreferrer">Abrir bot e vincular minha conta</a></p>
+<p>Ou abra @{{ bot_username }} e envie: <code>/start {{ code }}</code></p>
+{% endif %}
+{% endif %}
+<p>Use /ajuda no bot para conhecer os comandos. A integração funciona enquanto o computador e o serviço Docker estiverem
+    ligados.</p>
+{% endblock %}

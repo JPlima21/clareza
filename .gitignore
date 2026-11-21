@@ -1,3 +1,4 @@
+# Define quais arquivos o Git deve ignorar, como senhas locais, caches e documentos privados.
 # Credenciais locais (mantenha os exemplos versionados)
 .env
 .env.*
@@ -26,4 +27,5 @@ staticfiles/
 .DS_Store
 Thumbs.db
 Desktop.ini
+AGENDA.md
 

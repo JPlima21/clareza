@@ -1,3 +1,4 @@
+# Implementa python manage.py cleanup_expired_uploads para remover documentos temporários cujo prazo expirou.
 from django.core.management.base import BaseCommand
 
 from despesas.document_extraction import TemporaryUploadStore
